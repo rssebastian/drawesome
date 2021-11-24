@@ -1,5 +1,14 @@
 import React from 'react';
+import Hero from '../sections/Hero';
+import '../../assets/App.css'
 
-export const Landing = () => {
-  return <div></div>;
+const Landing = () => {
+  return (
+    <>
+      <Hero/>
+    </>
+
+  )
 };
+
+export default Landing;

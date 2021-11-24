@@ -1,17 +1,20 @@
-import React, { Fragment } from 'react';
-import NavBar from './Navbar';
-import InspirationSide from './InspirationSide';
-import CanvasSide from './CanvasSide';
+import React from 'react';
+import NavBar from '../sections/Navbar';
+import Palette from '../sections/Palette';
+import Canvas from '../sections/Canvas';
+import StickyFooter from '../sections/Footer';
+import { Grid } from '@mui/material';
 
 const PaintRoom = () => {
   return (
-    <Fragment>
+    <>
       <NavBar />
-      <div className='container'>
-        <InspirationSide />
-        <CanvasSide />
-      </div>
-    </Fragment>
+      <Grid container columns={24}>
+          <Palette />
+          <Canvas />
+      </Grid>
+      <StickyFooter />
+    </>
   );
 };
 
