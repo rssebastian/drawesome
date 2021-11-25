@@ -28,7 +28,7 @@ const Hero = () => {
             <SignUpBtn />
             <LogInBtn />
             <Grid item>
-              <Link to='/paintroom'>
+              <Link to='/paintroom' style={{ textDecoration: 'none' }}>
                 <Button className='button' variant='contained' color='primary'>
                   Jump In
                 </Button>

@@ -5,6 +5,7 @@ import { Typography, Button, Box, TextField } from '@mui/material';
 import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 import Alert from '../sections/Alert';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -26,7 +27,7 @@ const initialValues = {
   passwordConfirm: '',
 };
 
-const SignUp = ({ setAlert, register }) => {
+const SignUp = ({ setAlert, register, isAuthenticated }) => {
   const [values, setValues] = useState(initialValues);
   const { name, email, password, passwordConfirm } = values;
 
@@ -42,6 +43,15 @@ const SignUp = ({ setAlert, register }) => {
       register({ name, email, password });
     }
   };
+
+  if (isAuthenticated) {
+    return (
+      <Routes>
+        <Route path='/' element={<Navigate to='/paintroom' />} />
+      </Routes>
+    );
+  }
+
   return (
     <Box
       component='form'
@@ -106,6 +116,11 @@ const SignUp = ({ setAlert, register }) => {
 SignUp.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
-export default connect(null, { setAlert, register })(SignUp);
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { setAlert, register })(SignUp);

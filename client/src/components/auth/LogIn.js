@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Typography, Button, Box, TextField } from '@mui/material';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { login } from '../../actions/auth';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -19,7 +23,7 @@ const initialValues = {
   password: '',
 };
 
-const LogIn = () => {
+const LogIn = ({ login, isAuthenticated }) => {
   const [values, setValues] = useState(initialValues);
   const { email, password } = values;
 
@@ -29,13 +33,16 @@ const LogIn = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // if (values.password !== values.passwordConfirm) {
-    //   console.log('Passwords do not match');
-    // } else {
-    //   console.log(values);
-    // }
-    console.log(values);
+    login(email, password);
   };
+
+  if (isAuthenticated) {
+    return (
+      <Routes>
+        <Route path='/' element={<Navigate to='/paintroom' />} />
+      </Routes>
+    );
+  }
   return (
     <Box
       component='form'
@@ -78,4 +85,13 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+LogIn.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { login })(LogIn);

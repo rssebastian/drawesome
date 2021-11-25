@@ -3,6 +3,9 @@ import reactCSS from 'reactcss';
 import { Grid } from '@mui/material';
 import { SketchPicker } from 'react-color';
 import Bucket from './Bucket';
+import { setColor } from '../../actions/canvas';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class Palette extends React.Component {
   state = {
@@ -15,15 +18,29 @@ class Palette extends React.Component {
     },
   };
 
+  componentDidMount() {
+    const { r, g, b } = this.state.color;
+    console.log(
+      `Color is being set to rgb(${r},${g},${b}) in componentDidMount`
+    );
+    this.props.setColor(r, g, b);
+  }
+
   handleClick = () => {
     this.setState({ displayColorPicker: !this.state.displayColorPicker });
   };
 
   handleClose = () => {
+    const { r, g, b } = this.state.color;
+    console.log(`Color is being set to rgb(${r},${g},${b}) in handleClose`);
+    setColor(r, g, b);
     this.setState({ displayColorPicker: false });
   };
 
   handleChange = (color) => {
+    const { r, g, b } = color.rgb;
+    this.props.setColor(r, g, b);
+    console.log(`Color is being set to rgb(${r},${g},${b}) in handleChange`);
     this.setState({ color: color.rgb });
   };
 
@@ -101,4 +118,13 @@ class Palette extends React.Component {
   }
 }
 
-export default Palette;
+Palette.propTypes = {
+  setColor: PropTypes.func.isRequired,
+  rgb: PropTypes.object,
+};
+
+const mapStateToProps = (state) => ({
+  rgb: state.canvas,
+});
+
+export default connect(mapStateToProps, { setColor })(Palette);

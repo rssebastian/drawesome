@@ -8,8 +8,25 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import BrushIcon from '@mui/icons-material/Brush';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { logout } from '../../actions/auth';
+import { useTheme } from '@mui/material/styles';
 
-const Navbar = () => {
+const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
+  const theme = useTheme();
+  const authLinks = (
+    <Button color='inherit' component={Link} to={'/'} onClick={logout}>
+      Logout
+    </Button>
+  );
+
+  const guestLinks = (
+    <Button color='inherit' component={Link} to={'/'}>
+      Home
+    </Button>
+  );
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static'>
@@ -28,8 +45,7 @@ const Navbar = () => {
           <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
             Drawesome
           </Typography>
-          <Button color='inherit'>Login</Button>
-          <Button color='inherit'>Signup</Button>
+          {!loading && <>{isAuthenticated ? authLinks : guestLinks}</>}
           <IconButton
             size='large'
             edge='end'
@@ -45,4 +61,13 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+Navbar.propTypes = {
+  logout: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, { logout })(Navbar);
